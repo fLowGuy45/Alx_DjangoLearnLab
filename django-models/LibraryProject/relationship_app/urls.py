@@ -1,36 +1,79 @@
-# ---------------------- relationship_app/urls.py ----------------------
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import user_passes_test, login_required, permission_required
+from .models import Book
+from .forms import BookForm
 
-from django.urls import path
-from .views.admin_view import admin_view
-from .views.librarian_view import librarian_view
-from .views.member_view import member_view
-from django.contrib.auth.views import LoginView, LogoutView
-from . import views
+# --- Role check helpers ---
+def is_admin(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
-app_name = 'relationship_app'
+def is_librarian(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
-urlpatterns = [
-    # Role-based views
-    path('admin-view/', admin_view, name='admin_view'),
-    path('librarian-view/', librarian_view, name='librarian_view'),
-    path('member-view/', member_view, name='member_view'),
-
-    # Function-based and class-based views
-    path('books/', views.list_books, name='list_books'),
-    path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
-
-    # Authentication routes using Django’s built-in views
-    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),
-    path('register/', views.register_view, name='register'),
-]
+def is_member(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
 
-# ---------------------- project/urls.py ----------------------
+# --- Role-based views ---
+@login_required
+@user_passes_test(is_admin)
+def admin_view(request):
+    context = {'role': 'Admin'}
+    return render(request, 'relationship_app/admin_view.html', context)
 
-from django.urls import path, include
 
-urlpatterns = [
-    # ... other urls
-    path('relationship/', include(('relationship_app.urls', 'relationship_app'), namespace='relationship_app')),
-]
+@login_required
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    context = {'role': 'Librarian'}
+    return render(request, 'relationship_app/librarian_view.html', context)
+
+
+@login_required
+@user_passes_test(is_member)
+def member_view(request):
+    context = {'role': 'Member'}
+    return render(request, 'relationship_app/member_view.html', context)
+
+
+# ---------------------- Book List ----------------------
+@login_required
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'relationship_app/book_list.html', {'books': books})
+
+
+# ---------------------- Book CRUD Views with Permissions ----------------------
+
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = BookForm()
+    return render(request, 'relationship_app/add_book.html', {'form': form})
+
+
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def edit_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = BookForm(instance=book)
+    return render(request, 'relationship_app/edit_book.html', {'form': form, 'book': book})
+
+
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('book_list')
+    return render(request, 'relationship_app/delete_book.html', {'book': book})

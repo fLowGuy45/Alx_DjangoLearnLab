@@ -4,22 +4,29 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 
-# ---------------------- First Code Block ----------------------
-
-class Author(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
+# ---------------------- Book Model ----------------------
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+    author = models.CharField(max_length=100)
+    published_date = models.DateField()
+    isbn = models.CharField(max_length=13, unique=True)
+    pages = models.IntegerField()
+    cover = models.ImageField(upload_to='book_covers/', null=True, blank=True)
+    language = models.CharField(max_length=30)
+
+    class Meta:
+        permissions = [
+            ("can_add_book", "Can add a new book"),
+            ("can_change_book", "Can change book details"),
+            ("can_delete_book", "Can delete a book"),
+        ]
 
     def __str__(self):
         return self.title
 
+
+# ---------------------- Library and Librarian ----------------------
 
 class Library(models.Model):
     name = models.CharField(max_length=100)
@@ -37,7 +44,7 @@ class Librarian(models.Model):
         return self.name
 
 
-# ---------------------- Second Code Block ----------------------
+# ---------------------- UserProfile ----------------------
 
 class UserProfile(models.Model):
     ROLE_ADMIN = 'Admin'
@@ -57,7 +64,8 @@ class UserProfile(models.Model):
         return f"{self.user.username} ({self.role})"
 
 
-# signal to create or save UserProfile automatically
+# ---------------------- Signals ----------------------
+
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
