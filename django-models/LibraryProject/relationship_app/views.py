@@ -3,12 +3,15 @@ from django.contrib.auth.decorators import user_passes_test, login_required, per
 from .models import Book
 from .forms import BookForm
 
+
 # --- Role check helpers ---
 def is_admin(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
+
 def is_librarian(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+
 
 def is_member(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
@@ -70,3 +73,11 @@ def delete_book(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'relationship_app/delete_book.html', {'book': book})
+
+
+# ---------------------- Book List View ----------------------
+
+@login_required
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'relationship_app/book_list.html', {'books': books})
