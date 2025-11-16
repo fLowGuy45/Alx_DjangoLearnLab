@@ -19,6 +19,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  # Enforce HTTPS
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow site to be preloaded by browsers
+
+# Cookies only over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Additional security headers
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME sniffing
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS protection
+
+# Make sure DEBUG is False in production
+DEBUG = False
+ALLOWED_HOSTS = ['your-domain.com', 'www.your-domain.com']  # Replace with your domain
 
 
 # Security Settings for Production
