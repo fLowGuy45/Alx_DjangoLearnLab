@@ -54,3 +54,19 @@ This Django project demonstrates advanced features and security by using a custo
 @permission_required('bookshelf.can_edit', raise_exception=True)
 def edit_book(request, book_id):
     ...
+# Security Measures in LibraryProject
+
+## Django Security Best Practices Implemented
+
+1. **DEBUG=False** in production to prevent detailed error messages from being exposed.
+2. **Browser Protections:**
+   - `SECURE_BROWSER_XSS_FILTER=True`
+   - `X_FRAME_OPTIONS='DENY'`
+   - `SECURE_CONTENT_TYPE_NOSNIFF=True`
+3. **Cookies Security:**
+   - `CSRF_COOKIE_SECURE=True`
+   - `SESSION_COOKIE_SECURE=True`
+4. **CSRF Protection:** All forms include `{% csrf_token %}`.
+5. **SQL Injection Prevention:** All database access uses Django ORM; user inputs are validated.
+6. **Content Security Policy:** Configured via `django-csp` to restrict loaded resources.
+

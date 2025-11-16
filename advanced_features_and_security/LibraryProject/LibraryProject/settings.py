@@ -19,6 +19,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+
+
+# Security Settings for Production
+DEBUG = False  # Ensure DEBUG is False in production
+
+# Browser security settings
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Cookies
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3=+(+s$89%t$8ls^o$3*gxux*3+lj@a@y%jf&##la0t6^=12xc'
 
@@ -41,6 +56,12 @@ INSTALLED_APPS = [
 
 ]
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+INSTALLED_APPS += ['csp']
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com')
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'", 'data:')
 
 
 

@@ -1,4 +1,14 @@
+
 <!-- relationship_app/templates/relationship_app/register.html -->
+from django.shortcuts import render
+from .models import Book
+from django.db.models import Q
+
+def search_books(request):
+    query = request.GET.get('q', '')
+    results = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
+    return render(request, 'bookshelf/book_list.html', {'books': results})
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +17,12 @@
 </head>
 <body>
     <h1>Register</h1>
+<form method="POST" action="{% url 'some_view_name' %}">
+    {% csrf_token %}
+    <!-- form fields here -->
+    <button type="submit">Submit</button>
+</form>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

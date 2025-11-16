@@ -5,6 +5,12 @@
     <title>Library Detail</title>
 </head>
 <body>
+<form method="POST" action="{% url 'some_view_name' %}">
+    {% csrf_token %}
+    <!-- form fields here -->
+    <button type="submit">Submit</button>
+</form>
+
     <h1>Library: {{ library.name }}</h1>
     <h2>Books in Library:</h2>
     <ul>

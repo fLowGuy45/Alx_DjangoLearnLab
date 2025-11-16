@@ -6,7 +6,14 @@
     <title>Login</title>
 </head>
 <body>
+
     <h1>Login</h1>
+<form method="POST" action="{% url 'some_view_name' %}">
+    {% csrf_token %}
+    <!-- form fields here -->
+    <button type="submit">Submit</button>
+</form>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

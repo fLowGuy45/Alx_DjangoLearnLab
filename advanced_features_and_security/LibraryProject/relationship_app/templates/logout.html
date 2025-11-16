@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Logout</title>
 </head>
+<form method="POST" action="{% url 'some_view_name' %}">
+    {% csrf_token %}
+    <!-- form fields here -->
+    <button type="submit">Submit</button>
+</form>
+
 <body>
     <h1>You have been logged out</h1>
     <a href="{% url 'login' %}">Login again</a>
