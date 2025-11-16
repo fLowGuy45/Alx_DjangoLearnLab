@@ -1,8 +1,13 @@
 from django.contrib import admin
-from .models import UserProfile
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 
+class CustomUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        ('Extra Info', {'fields': ('date_of_birth', 'profile_photo')}),
+    )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ('Extra Info', {'fields': ('date_of_birth', 'profile_photo')}),
+    )
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role')
-    list_select_related = ('user',)
+admin.site.register(CustomUser, CustomUserAdmin)
