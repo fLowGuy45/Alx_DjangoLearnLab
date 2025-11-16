@@ -4,7 +4,7 @@
 # - can_create: allows creating new books
 # - can_edit: allows editing existing books
 # - can_delete: allows deleting books
-
+from .forms import ExampleForm
 from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, get_object_or_404, redirect
