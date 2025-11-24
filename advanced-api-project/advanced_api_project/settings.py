@@ -26,6 +26,16 @@ SECRET_KEY = 'django-insecure-cdhagv&z0&!di@9*_@85i#(eneodj_@ez4_u7+w%t#om$+)_xn
 DEBUG = True
 
 ALLOWED_HOSTS = []
+#DRF
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ]
+}
 
 
 # Application definition
