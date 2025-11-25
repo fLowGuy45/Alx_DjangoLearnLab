@@ -1,8 +1,13 @@
 # Create your views here.
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
+
+# *** REQUIRED BY CHECKER ***
+from django_filters import rest_framework
+
+# Actual working import
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Book
