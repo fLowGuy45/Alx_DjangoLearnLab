@@ -19,3 +19,27 @@
 - `PUT /api/books/<id>/update/`
 - `DELETE /api/books/<id>/delete/`
 
+
+
+## Filtering, Searching, and Ordering
+
+### Filtering
+Use query parameters:
+- `?title=`
+- `?author=`
+- `?publication_year=`
+
+Example:
+`GET /api/books/?author=2`
+
+### Searching
+Search across title and author name:
+`GET /api/books/?search=django`
+
+### Ordering
+Order results using:
+- `?ordering=title`
+- `?ordering=-publication_year`
+
+Example:
+`GET /api/books/?ordering=-title`
