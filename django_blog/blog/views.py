@@ -4,6 +4,20 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from .models import Post, Comment
 from .forms import CommentForm
+from django.db.models import Q
+
+def search_posts(request):
+    query = request.GET.get('q', '')
+    results = Post.objects.filter(
+        Q(title__icontains=query) |
+        Q(content__icontains=query) |
+        Q(tags__name__icontains=query)
+    ).distinct()
+    context = {
+        'query': query,
+        'results': results
+    }
+    return render(request, 'blog/search_results.html', context)
 
 # Class-based view for creating a comment
 class CommentCreateView(LoginRequiredMixin, CreateView):

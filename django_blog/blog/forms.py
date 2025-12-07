@@ -5,6 +5,18 @@ from django.contrib.auth.models import User
 from .models import Profile
 from .models import Comment
 
+from taggit.forms import TagWidget
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']
+        widgets = {
+            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'})
+        }
+
+
 # --- User Registration Form ---
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
