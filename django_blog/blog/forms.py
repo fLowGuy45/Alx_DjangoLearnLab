@@ -1,23 +1,29 @@
+# blog/forms.py
+
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
 
-class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField(required=True, help_text='Required. Enter a valid email address.')
+# --- User Registration Form ---
+class RegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password']
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField(required=True)
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
 
-    class Meta:
-        model = User
-        fields = ['username', 'email']
+        if password != confirm_password:
+            raise forms.ValidationError("Passwords do not match")
+        return cleaned_data
 
-class ProfileUpdateForm(forms.ModelForm):
+# --- Profile Update Form ---
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio', 'avatar']
+        fields = ['bio', 'avatar']  # make sure Profile model has 'bio' and 'avatar'
