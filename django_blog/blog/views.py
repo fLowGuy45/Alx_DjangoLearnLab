@@ -1,16 +1,28 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login as auth_login
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.contrib.auth.models import User
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-
-# Merged local imports
-from .forms import RegistrationForm, ProfileForm, CommentForm
 from .models import Post, Comment
 from .forms import CommentForm
+
+# Class-based view for creating a comment
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        post_id = self.kwargs.get('post_id')
+        post = get_object_or_404(Post, pk=post_id)
+        form.instance.author = self.request.user
+        form.instance.post = post
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+
+
 
 class PostDetailView(DetailView):
     model = Post

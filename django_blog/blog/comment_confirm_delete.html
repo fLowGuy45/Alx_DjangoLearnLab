@@ -1,0 +1,32 @@
+  GNU nano 8.5                     comment_confirm_delete.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends "base.html" %}
+{% block content %}
+<h2>Delete Comment</h2>
+<p>Are you sure you want to delete this comment?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Confirm Delete</button>
+</form>
+<a href="{{ object.post.get_absolute_url }}">Cancel</a>
+{% endblock %}
+

@@ -23,7 +23,9 @@ urlpatterns = [
     path('', views.PostListView.as_view(), name='post-list'),  # optional: home page lists posts
 
     # Comment URLs
-path('post/<int:post_id>/comments/new/', views.add_comment, name='add-comment'),
+#path('post/<int:post_id>/comments/new/', views.add_comment, name='add-comment
+path('post/<int:post_id>/comments/new/', views.CommentCreateView.as_view(), name='add-comment'),
+
 path('comment/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='comment-update'),
 path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
 
