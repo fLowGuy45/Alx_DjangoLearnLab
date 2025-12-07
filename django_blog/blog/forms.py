@@ -1,5 +1,5 @@
 # blog/forms.py
-
+from taggit.forms import TagWidget
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
@@ -7,6 +7,7 @@ from .models import Comment
 
 from taggit.forms import TagWidget
 from .models import Post
+from taggit.forms import TagWidget
 
 class PostForm(forms.ModelForm):
     class Meta:
