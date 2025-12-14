@@ -20,3 +20,18 @@ cd social_media_api
 - DELETE /api/posts/{id}/
 
 Search:
+
+
+## User Follow & Feed API
+
+### Follow a User
+POST /api/accounts/follow/<user_id>/
+Authorization required
+
+### Unfollow a User
+POST /api/accounts/unfollow/<user_id>/
+Authorization required
+
+### Get User Feed
+GET /api/posts/feed/
+Returns posts from followed users ordered by newest first.
