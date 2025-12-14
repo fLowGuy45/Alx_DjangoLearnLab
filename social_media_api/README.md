@@ -9,3 +9,14 @@ A Django REST API for a social media platform with user authentication and profi
 ```bash
 git clone https://github.com/<your-username>/Alx_DjangoLearnLab.git
 cd social_media_api
+
+
+## Posts & Comments API
+
+### Posts
+- GET /api/posts/
+- POST /api/posts/
+- PUT /api/posts/{id}/
+- DELETE /api/posts/{id}/
+
+Search:
