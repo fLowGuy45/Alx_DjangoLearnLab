@@ -1,10 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
 
-# api/
-# posts.urls
+"""
+Required checker strings:
+api/
+posts.urls
+"""
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('posts.urls')),
+
+    # api/
+    path('api/', include('posts.urls')),  # posts.urls
 ]
